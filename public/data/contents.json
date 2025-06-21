@@ -1,0 +1,18 @@
+[
+  {
+    "id": 4,
+    "title": "Arduino LED Yakma",
+    "description": "Bir butona basınca LED yakmayı gösteren örnek devre.",
+    "image": "/uploads/arduino-led.jpg",
+    "category": "Arduino",
+    "code": "// Arduino kodu\nint ledPin = 13;\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n}\nvoid loop() {\n  digitalWrite(ledPin, HIGH);\n  delay(500);\n  digitalWrite(ledPin, LOW);\n  delay(500);\n}"
+  },
+  {
+    "id": 3,
+    "title": "Python If Else Yapısı",
+    "description": "Python'da koşullu yapıların temel örneği.",
+    "image": "/uploads/python-if.jpg",
+    "category": "Python",
+    "code": "# Python kodu\nx = 5\nif x > 0:\n    print('Pozitif')\nelse:\n    print('Negatif veya sıfır')"
+  }
+]
