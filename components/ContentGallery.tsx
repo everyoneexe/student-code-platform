@@ -9,8 +9,9 @@ type ContentItem = {
   description: string
   image: string
   category: string
-  code?: string 
+  code: string
 }
+
 
 export default function ContentGallery() {
   const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null)
