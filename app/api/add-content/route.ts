@@ -1,38 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
-
-const DATA_PATH = path.join(process.cwd(), 'data', 'contents.json')
+import { dataStore } from '../../../lib/data-store'
 
 type NewContent = {
   title: string
   description: string
   image: string
   category: string
+  code?: string
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { title, description, image, category } = body as NewContent
+    const { title, description, image, category, code } = body as NewContent
 
-    const file = fs.readFileSync(DATA_PATH, 'utf-8')
-    const contents = JSON.parse(file)
+    if (!title || !description || !category) {
+      return NextResponse.json(
+        { success: false, error: 'Başlık, açıklama ve kategori gereklidir' },
+        { status: 400 }
+      )
+    }
 
-    const newId = Math.max(...contents.map((c: any) => c.id ?? 0)) + 1
+    // Eğer resim seçilmemişse varsayılan resim kullan
+    const finalImage = image || '/default.jpg'
 
-    const newContent = {
-  id: newId,
-  title,
-  description,
-  image,
-  category,
-  code: body.code || '',
-}
-
-
-    contents.push(newContent)
-    fs.writeFileSync(DATA_PATH, JSON.stringify(contents, null, 2))
+    const newContent = dataStore.addContent({
+      title,
+      description,
+      image: finalImage,
+      category,
+      code: code || ''
+    })
 
     return NextResponse.json({ success: true, content: newContent })
   } catch (e) {

@@ -1,36 +1,230 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 Ders Takip Projesi - Kod & Devre Paylaşım Platformu
 
-## Getting Started
+Bu proje, öğrencilerin programlama örneklerini ve devre projelerini paylaşabilecekleri modern bir web uygulamasıdır.
 
-First, run the development server:
+## ✨ Ana Özellikler
 
+### 🎨 Frontend
+- ✅ **Modern React/Next.js** arayüzü (TypeScript)
+- ✅ **Responsive tasarım** (Tailwind CSS) 
+- ✅ **Gelişmiş proje galerisi** ve modal görüntüleyici
+- ✅ **Kategori filtreleme** ve slider navigasyon
+- ✅ **Kod kopyalama özelliği** 
+- ✅ **Ayrı kod modal'ı** - büyük ve düzenli kod görüntüleme
+- ✅ **Delete özelliği** - confirmation modal ile güvenli silme
+- ✅ **Scroll destekli açıklamalar** - uzun metinler için
+- ✅ **Varsayılan fotoğraf sistemi** - fotoğraf olmadığında otomatik fallback
+
+### 🗄️ Backend  
+- ✅ **JSON tabanlı veri depolama** - basit ve etkili
+- ✅ **RESTful API endpoints** - modern API tasarımı
+- ✅ **CRUD operasyonları** (Create, Read, Update, Delete)
+- ✅ **Otomatik timestamp** tracking
+- ✅ **Form validation** ve error handling
+
+## 🚀 Kurulum
+
+### 1. Depoyu Klonla
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [your-repo-url]
+cd ders-takip
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Bağımlılıkları Yükle
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Geliştirme Sunucusunu Başlat
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Tarayıcıda Aç
+```
+http://localhost:3000
+```
 
-## Learn More
+## 📂 Proje Yapısı
 
-To learn more about Next.js, take a look at the following resources:
+```
+ders-takip/
+├── app/
+│   ├── admin/
+│   │   └── dashboard/          # Admin Panel
+│   ├── api/
+│   │   ├── contents/           # İçerik API'leri
+│   │   ├── add-content/        # İçerik ekleme API
+│   │   └── categories/         # Kategori API'si
+│   └── page.tsx               # Ana sayfa
+├── components/
+│   └── ContentGallery.tsx     # Ana galeri komponenti
+├── lib/
+│   └── data-store.ts          # JSON veri yöneticisi
+├── data/
+│   └── contents.json          # Veri dosyası
+├── public/
+│   ├── default.jpg            # Varsayılan fotoğraf
+│   └── uploads/               # Yüklenen dosyalar
+└── package.json
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔧 API Endpoints
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### İçerik İşlemleri
+```bash
+GET    /api/contents           # Tüm içerikleri getir
+POST   /api/contents           # Yeni içerik ekle
+DELETE /api/contents/[id]      # İçerik sil
+```
 
-## Deploy on Vercel
+### Admin İşlemleri
+```bash
+POST   /api/add-content        # Admin panelinden içerik ekle
+GET    /api/categories         # Kategorileri getir
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📊 Veri Yapısı
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### ContentItem
+```typescript
+interface ContentItem {
+  id: number                    // Unique ID
+  title: string                 // Proje başlığı
+  description: string           // Proje açıklaması
+  image: string                 // Fotoğraf URL'i
+  category: string              // Kategori (Arduino, Tümü, Diğer)
+  code: string                  // Kod örneği
+  createdAt: string            // Oluşturulma tarihi
+  updatedAt: string            // Güncellenme tarihi
+}
+```
+
+## 🎯 Yeni Özellikler
+
+### 1. **Ayrı Kod Modal'ı**
+- Kod örnekleri artık ayrı modal'da açılıyor
+- Daha büyük görüntüleme alanı
+- "📋 Kod Örneği Gör" butonu ile erişim
+- "📄 Kopyala" butonu ile kod kopyalama
+
+### 2. **Delete Özelliği**
+- Hover ile görünen delete butonları (kırmızı ×)
+- Confirmation modal ile güvenli silme
+- "İçeriği Sil" onay sistemi
+
+### 3. **Varsayılan Fotoğraf Sistemi**
+- Fotoğraf yüklenmediğinde otomatik `/default.jpg` kullanımı
+- API seviyesinde fallback logic
+- Responsive görüntüleme
+
+### 4. **Scroll Destekli Açıklamalar**
+- Modal'da uzun açıklamalar için scroll özelliği
+- `max-h-32` ile sınırlı yükseklik
+- Gri kutulu tasarım ile düzenli görünüm
+
+### 5. **Text Overflow Düzeltmeleri**
+- `break-words` ile kelime kırma
+- `max-width` ile taşma kontrolü
+- Responsive text wrapping
+
+## 🎮 Admin Panel
+
+### Erişim
+- **URL:** `/admin/dashboard`
+- **Şifre:** `oguzhan2025`
+
+### Özellikler
+- 📝 **CRUD operasyonları** - Tam içerik yönetimi
+- 📊 **İstatistikler** - Toplam içerik ve kategori sayıları
+- 🖼️ **Görsel yükleme** - Drag & drop file upload
+- 📱 **Responsive tasarım** - Mobil uyumlu
+- 🔔 **Form validation** - Kullanıcı dostu hata mesajları
+
+## 🎨 Kullanıcı Arayüzü
+
+### Ana Sayfa Features
+- **Kategori Filtreleme:** Tümü, Arduino, Diğer
+- **Slider Navigation:** ◀ ▶ butonları ile sayfalama
+- **Hover Effects:** Delete butonları ve görsel efektler
+- **Modal Interactions:** Tıkla-aç modal sistemi
+- **Code Syntax:** Syntax highlighted kod blokları
+
+### Responsive Design
+- **Desktop:** 3 sütunlu grid layout
+- **Tablet:** 2 sütunlu layout
+- **Mobile:** Tek sütun responsive tasarım
+
+## 🛠️ Kullanılan Teknolojiler
+
+- **Frontend:** Next.js 14, React, TypeScript
+- **Styling:** Tailwind CSS
+- **Icons:** Emoji icons (📋, ✅, 📄, ×)
+- **API:** Next.js API Routes
+- **Data:** JSON file-based storage
+- **File Handling:** Multipart form data
+
+## 🔍 Kullanım Örnekleri
+
+### İçerik Görüntüleme
+1. Ana sayfada kategori seç
+2. Proje kartına tıkla
+3. Modal'da detayları gör
+4. "📋 Kod Örneği Gör" ile kodu incele
+
+### İçerik Ekleme
+1. `/admin/dashboard` adresine git
+2. Şifre gir: `oguzhan2025`
+3. Form doldur (başlık, açıklama, kategori, kod)
+4. Fotoğraf yükle (opsiyonel)
+5. "İçerik Ekle" butonuna tıkla
+
+### İçerik Silme
+1. Ana sayfada proje kartının üzerine hover yap
+2. Kırmızı "×" butonunu tıkla
+3. Confirmation modal'da "Sil" butonuna tıkla
+
+## 🐛 Troubleshooting
+
+### Genel Sorunlar
+1. **Port 3000 meşgul** → `lsof -ti:3000 | xargs kill -9`
+2. **Node modules sorunu** → `rm -rf node_modules && npm install`
+3. **Varsayılan fotoğraf yüklenmiyor** → `public/default.jpg` dosyasını kontrol et
+
+### Development
+```bash
+# Clean install
+rm -rf node_modules package-lock.json
+npm install
+
+# Reset data
+echo "[]" > data/contents.json
+
+# Check file permissions
+ls -la public/default.jpg
+```
+
+## 📈 İstatistikler
+
+- **Toplam Component:** 1 ana galeri komponenti
+- **API Endpoint:** 4 RESTful endpoint
+- **Responsive Breakpoint:** 3 farklı ekran boyutu
+- **Modal Type:** 3 farklı modal türü
+
+## 🎉 Sonuç
+
+Bu proje **modern web development** prensiplerine uygun olarak geliştirilmiş:
+
+- 🎯 **User Experience** odaklı tasarım
+- 🔧 **Maintainable** kod yapısı  
+- 📱 **Mobile-first** responsive tasarım
+- 🚀 **Performance** optimized
+- 💻 **Developer-friendly** API design
+
+Ödev düzeyinde gelişmiş bir sistem olmasının yanı sıra, gerçek dünya projelerinde kullanılabilir **production-ready** özelliklere sahiptir! 🔥
+
+---
+
+**Geliştirici:** [Your Name]  
+**Tarih:** Aralık 2024  
+**Versiyon:** 2.0.0

@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Arduino"
+  },
+  {
+    "id": 2,
+    "name": "Python"
+  },
+  {
+    "id": 3,
+    "name": "Devre"
+  },
+  {
+    "id": 4,
+    "name": "Scratch"
+  },
+  {
+    "id": 5,
+    "name": "Diğer"
+  }
+]
