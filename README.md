@@ -26,7 +26,7 @@ Bu proje, öğrencilerin programlama örneklerini ve devre projelerini paylaşab
 
 ### 1. Depoyu Klonla
 ```bash
-git clone [your-repo-url]
+git clone https://github.com/everyoneexe/student-code-platform.git
 cd ders-takip
 ```
 
@@ -84,21 +84,77 @@ POST   /api/add-content        # Admin panelinden içerik ekle
 GET    /api/categories         # Kategorileri getir
 ```
 
-## 📊 Veri Yapısı
+## 📊 Veri Yapısı ve ER Diyagramı
 
-### ContentItem
+### Entity-Relationship Diyagramı
+
+```mermaid
+erDiagram
+    CONTENTS {
+        int id PK
+        string title
+        string description
+        string image
+        string category FK
+        string code
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    CATEGORIES {
+        string name PK
+        datetime createdAt
+    }
+    
+    USERS {
+        int id PK
+        string username
+        string password
+        string role
+        datetime createdAt
+    }
+    
+    CONTENTS ||--o{ CATEGORIES : belongs_to
+    USERS ||--o{ CONTENTS : creates
+```
+
+### ContentItem Entity
 ```typescript
 interface ContentItem {
-  id: number                    // Unique ID
+  id: number                    // Primary Key - Unique ID
   title: string                 // Proje başlığı
   description: string           // Proje açıklaması
-  image: string                 // Fotoğraf URL'i
-  category: string              // Kategori (Arduino, Tümü, Diğer)
+  image: string                 // Fotoğraf URL'i (Foreign Key to Files)
+  category: string              // Foreign Key to Categories
   code: string                  // Kod örneği
-  createdAt: string            // Oluşturulma tarihi
-  updatedAt: string            // Güncellenme tarihi
+  createdAt: string            // Timestamp - Oluşturulma tarihi
+  updatedAt: string            // Timestamp - Güncellenme tarihi
 }
 ```
+
+### Category Entity
+```typescript
+interface Category {
+  name: string                  // Primary Key - Kategori adı
+  createdAt: string            // Timestamp - Oluşturulma tarihi
+}
+```
+
+### User Entity (Admin)
+```typescript
+interface User {
+  id: number                    // Primary Key - Unique ID
+  username: string              // Kullanıcı adı
+  password: string              // Şifre (hashed)
+  role: string                  // Rol (admin, user)
+  createdAt: string            // Timestamp - Oluşturulma tarihi
+}
+```
+
+### Relationships
+- **Contents ↔ Categories**: Bir içerik bir kategoriye ait (Many-to-One)
+- **Users ↔ Contents**: Bir kullanıcı birden fazla içerik oluşturabilir (One-to-Many)
+- **Contents ↔ Files**: Bir içeriğin bir fotoğrafı olabilir (One-to-One)
 
 ## 🎯 Yeni Özellikler
 
@@ -223,8 +279,3 @@ Bu proje **modern web development** prensiplerine uygun olarak geliştirilmiş:
 
 Ödev düzeyinde gelişmiş bir sistem olmasının yanı sıra, gerçek dünya projelerinde kullanılabilir **production-ready** özelliklere sahiptir! 🔥
 
----
-
-**Geliştirici:** [Your Name]  
-**Tarih:** Aralık 2024  
-**Versiyon:** 2.0.0
