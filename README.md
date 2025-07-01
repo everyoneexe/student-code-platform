@@ -171,75 +171,101 @@ GET    /api/categories         # Kategorileri getir
 
 ## 📊 Veri Yapısı ve ER Diyagramı
 
-### Entity-Relationship Diyagramı
+### 🔥 Firebase Firestore Entity-Relationship Diyagramı
 
 ```mermaid
 erDiagram
     CONTENTS {
-        int id PK
-        string title
-        string description
-        string image
-        string category FK
-        string code
-        datetime createdAt
-        datetime updatedAt
+        string id PK "Auto-generated Firebase Document ID"
+        string title "Proje başlığı"
+        string description "Proje açıklaması"
+        string photoUrl "Firebase Storage URL"
+        string category "Kategori adı"
+        string code "Kod örneği"
+        timestamp createdAt "Firebase server timestamp"
+        timestamp updatedAt "Firebase server timestamp"
     }
     
     CATEGORIES {
-        string name PK
-        datetime createdAt
+        string id PK "Auto-generated Firebase Document ID"
+        string name "Kategori adı"
+        timestamp createdAt "Firebase server timestamp"
     }
     
-    USERS {
-        int id PK
-        string username
-        string password
-        string role
-        datetime createdAt
+    FIREBASE_STORAGE {
+        string path PK "Storage file path"
+        string downloadURL "Public access URL"
+        string contentType "File MIME type"
+        timestamp uploadedAt "Upload timestamp"
     }
     
     CONTENTS ||--o{ CATEGORIES : belongs_to
-    USERS ||--o{ CONTENTS : creates
+    CONTENTS ||--o{ FIREBASE_STORAGE : references
 ```
 
-### ContentItem Entity
+### 🔥 Firebase ContentItem Entity
 ```typescript
 interface ContentItem {
-  id: number                    // Primary Key - Unique ID
+  id?: string                   // Firebase Document ID (auto-generated)
   title: string                 // Proje başlığı
   description: string           // Proje açıklaması
-  image: string                 // Fotoğraf URL'i (Foreign Key to Files)
-  category: string              // Foreign Key to Categories
+  photoUrl: string              // Firebase Storage URL
+  category: string              // Kategori adı
   code: string                  // Kod örneği
-  createdAt: string            // Timestamp - Oluşturulma tarihi
-  updatedAt: string            // Timestamp - Güncellenme tarihi
+  createdAt: any               // Firebase server timestamp
+  updatedAt: any               // Firebase server timestamp
 }
 ```
 
-### Category Entity
+### 🔥 Firebase Category Entity
 ```typescript
 interface Category {
-  name: string                  // Primary Key - Kategori adı
-  createdAt: string            // Timestamp - Oluşturulma tarihi
+  id?: string                   // Firebase Document ID (auto-generated)
+  name: string                  // Kategori adı
+  createdAt: any               // Firebase server timestamp
 }
 ```
 
-### User Entity (Admin)
+### 🔥 Firebase Storage Entity
 ```typescript
-interface User {
-  id: number                    // Primary Key - Unique ID
-  username: string              // Kullanıcı adı
-  password: string              // Şifre (hashed)
-  role: string                  // Rol (admin, user)
-  createdAt: string            // Timestamp - Oluşturulma tarihi
+interface StorageFile {
+  path: string                  // Storage file path
+  downloadURL: string           // Public access URL
+  contentType: string           // File MIME type (image/jpeg, image/png, etc.)
+  uploadedAt: any              // Firebase server timestamp
 }
 ```
 
-### Relationships
-- **Contents ↔ Categories**: Bir içerik bir kategoriye ait (Many-to-One)
-- **Users ↔ Contents**: Bir kullanıcı birden fazla içerik oluşturabilir (One-to-Many)
-- **Contents ↔ Files**: Bir içeriğin bir fotoğrafı olabilir (One-to-One)
+### 🔗 Firebase Firestore Relationships
+- **contents ↔ categories**: Document reference by category name (Many-to-One)
+- **contents ↔ storage**: photoUrl field references Firebase Storage (One-to-One)
+- **Real-time sync**: All collections support live data synchronization
+- **Auto-scaling**: Firebase handles automatic scaling and performance
+
+### 📊 Current Live Data (Production)
+```typescript
+// Firestore Collection: "contents" (3 documents)
+[
+  {
+    id: "JdeS5f3a5d0TnG7q6dnZ",
+    title: "React Hook Kullanımı",
+    category: "React",
+    photoUrl: "https://picsum.photos/400/300?random=1"
+  },
+  {
+    id: "iG7Sbzz4SZdOyj8XVlKA",
+    title: "Next.js API Routes",
+    category: "Next.js",
+    photoUrl: "https://picsum.photos/400/300?random=2"
+  },
+  {
+    id: "WT3WoixRwP1upc3Q2FVN",
+    title: "Firebase Firestore",
+    category: "Firebase",
+    photoUrl: "https://picsum.photos/400/300?random=3"
+  }
+]
+```
 
 ## 🎯 Yeni Özellikler
 
