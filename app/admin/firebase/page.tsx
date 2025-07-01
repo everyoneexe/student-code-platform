@@ -8,7 +8,7 @@ interface ContentItem {
   id?: string
   title: string
   description: string
-  image: string
+  photoUrl: string
   category: string
   code: string
   createdAt: any
@@ -37,7 +37,7 @@ export default function FirebaseAdminPanel() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    image: '',
+    photoUrl: '',
     category: 'Arduino',
     code: '',
   })
@@ -95,7 +95,7 @@ export default function FirebaseAdminPanel() {
     toast.loading('İçerik ekleniyor...')
 
     try {
-      let imagePath = formData.image
+      let imagePath = formData.photoUrl
 
       // Görsel upload varsa önce onu yükle
       if (selectedFile) {
@@ -113,7 +113,7 @@ export default function FirebaseAdminPanel() {
       // İçerik ekle
       const contentId = await ContentService.addContent({
         ...formData,
-        image: imagePath
+        photoUrl: imagePath
       })
 
       if (contentId) {
@@ -124,7 +124,7 @@ export default function FirebaseAdminPanel() {
         setFormData({
           title: '',
           description: '',
-          image: '',
+          photoUrl: '',
           category: 'Arduino',
           code: '',
         })
@@ -198,6 +198,102 @@ export default function FirebaseAdminPanel() {
     }
   }
 
+  // Test verileri ekleme fonksiyonu
+  const addTestData = async () => {
+    if (!confirm('Test verileri eklensin mi? Bu işlem 3 adet örnek proje ekleyecek.')) return
+
+    setLoading(true)
+    toast.loading('Test verileri ekleniyor...')
+
+    const testContents = [
+      {
+        title: "React Hook Kullanımı",
+        description: "React'ta useState ve useEffect hook'larının detaylı kullanımı. Modern React uygulamalarında state yönetimi ve lifecycle işlemleri.",
+        photoUrl: "https://picsum.photos/400/300?random=1",
+        category: "React",
+        code: `const [count, setCount] = useState(0);
+
+useEffect(() => {
+  console.log('Component mounted');
+  
+  return () => {
+    console.log('Component unmounted');
+  };
+}, []);
+
+const handleIncrement = () => {
+  setCount(prevCount => prevCount + 1);
+};`
+      },
+      {
+        title: "Next.js API Routes",
+        description: "Next.js'te API endpoint'leri oluşturma ve kullanma. Server-side işlemler ve RESTful API tasarımı.",
+        photoUrl: "https://picsum.photos/400/300?random=2",
+        category: "Next.js",
+        code: `export default function handler(req, res) {
+  if (req.method === 'POST') {
+    const { name, email } = req.body;
+    
+    // Veritabanı işlemleri
+    
+    res.status(200).json({
+      message: 'Kayıt başarılı!',
+      data: { name, email }
+    });
+  } else {
+    res.status(405).json({ message: 'Method not allowed' });
+  }
+}`
+      },
+      {
+        title: "Firebase Firestore",
+        description: "Firestore veritabanı işlemleri ve real-time güncellemeler. NoSQL veritabanı kullanımı ve best practices.",
+        photoUrl: "https://picsum.photos/400/300?random=3",
+        category: "Firebase",
+        code: `import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
+
+// Veri ekleme
+const addContent = async (data) => {
+  const docRef = await addDoc(collection(db, 'contents'), {
+    ...data,
+    createdAt: serverTimestamp()
+  });
+  console.log('Document ID:', docRef.id);
+};
+
+// Real-time dinleme
+const unsubscribe = onSnapshot(collection(db, 'contents'), (snapshot) => {
+  const contents = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+  setContents(contents);
+});`
+      }
+    ]
+
+    try {
+      let successCount = 0
+      for (const content of testContents) {
+        const id = await ContentService.addContent(content)
+        if (id) successCount++
+      }
+
+      toast.dismiss()
+      if (successCount === testContents.length) {
+        toast.success(`${successCount} test verisi başarıyla eklendi! 🎉`)
+        loadDashboard() // Verileri yenile
+      } else {
+        toast.error(`Sadece ${successCount}/${testContents.length} veri eklenebildi.`)
+      }
+    } catch (error) {
+      toast.dismiss()
+      toast.error('Test verileri eklenirken hata oluştu!')
+      console.error('Test veri ekleme hatası:', error)
+    }
+    setLoading(false)
+  }
+
   if (!authenticated) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 p-4">
@@ -255,6 +351,13 @@ export default function FirebaseAdminPanel() {
               className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all transform hover:scale-105 shadow-lg"
             >
               ➕ Yeni İçerik
+            </button>
+            <button
+              onClick={addTestData}
+              disabled={loading}
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50"
+            >
+              🧪 Test Verisi
             </button>
             <button
               onClick={loadDashboard}
@@ -490,8 +593,8 @@ function EditModal({ content, onSave, onCancel, categories }: EditModalProps) {
             type="text"
             placeholder="Görsel URL"
             className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-            value={formData.image}
-            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+            value={formData.photoUrl}
+            onChange={(e) => setFormData({ ...formData, photoUrl: e.target.value })}
             required
           />
           <select

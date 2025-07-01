@@ -26,7 +26,7 @@ export interface ContentItem {
   id?: string
   title: string
   description: string
-  image: string
+  photoUrl: string
   category: string
   code: string
   createdAt: any

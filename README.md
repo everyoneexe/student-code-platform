@@ -69,7 +69,92 @@ ders-takip/
 └── package.json
 ```
 
-## 🔧 API Endpoints
+## 🗄️ Veritabanı Teknolojisi
+
+### 🔥 **Firebase Firestore + Storage**
+Bu proje **Google Firebase** ekosistemi kullanarak **cloud-based NoSQL** veritabanı ile geliştirilmiştir:
+
+```
+Firebase Services:
+├── 🔥 Firestore Database    # NoSQL document database
+├── 📁 Firebase Storage      # File storage (images, files)
+├── 🔐 Firebase Auth         # Authentication (optional)
+└── 📊 Firebase Analytics    # Usage analytics (optional)
+```
+
+### 💾 **Veritabanı Mimarisi:**
+- **Database Type:** Cloud Firestore (NoSQL Document Database)
+- **Technology:** Google Firebase
+- **Data Format:** Document-based JSON storage
+- **ACID Properties:** Full ACID compliance
+- **Scalability:** Enterprise-level, auto-scaling
+- **Real-time:** Live data synchronization
+
+### 🔄 **Firebase Service Katmanı:**
+```typescript
+// lib/firebase-service.ts - Firebase abstraction layer
+class ContentService {
+  // Firestore CRUD Operations
+  static async getAllContents(): Promise<ContentItem[]>
+  static async addContent(content: ContentItem): Promise<string | null>
+  static async updateContent(id: string, updates: Partial<ContentItem>): Promise<boolean>
+  static async deleteContent(id: string): Promise<boolean>
+}
+
+class StorageService {
+  // Firebase Storage Operations
+  static async uploadImage(file: File, path: string): Promise<string | null>
+  static async deleteImage(imageUrl: string): Promise<boolean>
+}
+```
+
+### 🎯 **Neden Firebase Firestore?**
+
+| **Avantajlar** | **Açıklama** |
+|----------------|--------------|
+| ☁️ **Cloud-Based** | Sunucu yönetimi gerektirmez |
+| 🚀 **Real-time** | Anlık veri senkronizasyonu |
+| 📈 **Scalable** | Otomatik ölçeklendirme |
+| 🔐 **Secure** | Built-in güvenlik kuralları |
+| 🌍 **Global CDN** | Dünya çapında hızlı erişim |
+| 💰 **Cost-Effective** | Pay-as-you-use model |
+
+### 📊 **Firestore Collections:**
+```typescript
+// contents collection
+{
+  id: string,                    // Auto-generated document ID
+  title: string,                 // Proje başlığı
+  description: string,           // Proje açıklaması
+  image: string,                 // Firebase Storage URL
+  category: string,              // Kategori
+  code: string,                  // Kod örneği
+  createdAt: Timestamp,          // Firebase server timestamp
+  updatedAt: Timestamp           // Firebase server timestamp
+}
+
+// categories collection
+{
+  id: string,                    // Auto-generated document ID
+  name: string,                  // Kategori adı
+  createdAt: Timestamp           // Firebase server timestamp
+}
+```
+
+### 🔧 **Firebase Configuration:**
+```typescript
+// lib/firebase.ts
+const firebaseConfig = {
+  apiKey: "AIza...",
+  authDomain: "project.firebaseapp.com",
+  projectId: "student-platform",
+  storageBucket: "project.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123:web:abc123"
+}
+```
+
+## � API Endpoints
 
 ### İçerik İşlemleri
 ```bash

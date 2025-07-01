@@ -8,7 +8,7 @@ interface ContentItem {
   id?: string
   title: string
   description: string
-  image: string
+  photoUrl: string
   category: string
   code: string
   createdAt: any
@@ -156,7 +156,7 @@ export default function FirebaseContentGallery() {
               </div>
               
               <img
-                src={item.image}
+                src={item.photoUrl}
                 alt={item.title}
                 className="w-full h-48 object-cover rounded-t-2xl"
                 onError={(e) => {
@@ -246,7 +246,7 @@ export default function FirebaseContentGallery() {
 
             {/* İçerik Görseli */}
             <img
-              src={selectedContent.image}
+              src={selectedContent.photoUrl}
               alt={selectedContent.title}
               className="max-h-[400px] mx-auto rounded-xl shadow-lg object-contain bg-gradient-to-br from-blue-50 to-purple-50 p-4"
               onError={(e) => {

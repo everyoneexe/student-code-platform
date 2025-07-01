@@ -4,12 +4,12 @@ import { getStorage } from 'firebase/storage'
 import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  authDomain: "ders-takip-xxxx.firebaseapp.com",
-  projectId: "ders-takip-xxxx",
-  storageBucket: "ders-takip-xxxx.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef123456789012"
+  apiKey: "AIzaSyB5KB4m6uECHtdbuYDiaXNJYRHQrMbQ9es",
+  authDomain: "ders-87307.firebaseapp.com",
+  projectId: "ders-87307",
+  storageBucket: "ders-87307.firebasestorage.app",
+  messagingSenderId: "534083096279",
+  appId: "1:534083096279:web:d64e23adb17b128b54ea92"
 }
 
 // Firebase uygulamasını başlat

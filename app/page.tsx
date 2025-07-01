@@ -1,11 +1,11 @@
 import Hero from '@/components/Hero'
-import ContentGallery from '@/components/ContentGallery'
+import FirebaseContentGallery from '@/components/FirebaseContentGallery'
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <ContentGallery />
+      <FirebaseContentGallery />
     </>
   )
 }
