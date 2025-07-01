@@ -15,9 +15,10 @@ Bu proje, öğrencilerin programlama örneklerini ve devre projelerini paylaşab
 - ✅ **Scroll destekli açıklamalar** - uzun metinler için
 - ✅ **Varsayılan fotoğraf sistemi** - fotoğraf olmadığında otomatik fallback
 
-### 🗄️ Backend  
-- ✅ **JSON tabanlı veri depolama** - basit ve etkili
-- ✅ **RESTful API endpoints** - modern API tasarımı
+### 🗄️ Backend
+- ✅ **Firebase Firestore** - cloud-based NoSQL veritabanı
+- ✅ **Real-time veri senkronizasyonu** - anlık güncellemeler
+- ✅ **Firebase Storage** - görsel ve dosya yönetimi
 - ✅ **CRUD operasyonları** (Create, Read, Update, Delete)
 - ✅ **Otomatik timestamp** tracking
 - ✅ **Form validation** ve error handling
@@ -51,21 +52,21 @@ http://localhost:3000
 ders-takip/
 ├── app/
 │   ├── admin/
-│   │   └── dashboard/          # Admin Panel
+│   │   ├── dashboard/          # Eski Admin Panel
+│   │   └── firebase/           # 🔥 Firebase Admin Panel
 │   ├── api/
-│   │   ├── contents/           # İçerik API'leri
-│   │   ├── add-content/        # İçerik ekleme API
+│   │   ├── contents/           # İçerik API'leri (eski)
+│   │   ├── test-data/          # 🔥 Firebase test verisi API
 │   │   └── categories/         # Kategori API'si
 │   └── page.tsx               # Ana sayfa
 ├── components/
-│   └── ContentGallery.tsx     # Ana galeri komponenti
+│   └── FirebaseContentGallery.tsx  # 🔥 Firebase galeri komponenti
 ├── lib/
-│   └── data-store.ts          # JSON veri yöneticisi
-├── data/
-│   └── contents.json          # Veri dosyası
+│   ├── firebase.ts            # 🔥 Firebase konfigürasyonu
+│   ├── firebase-service.ts    # 🔥 Firebase service layer
+│   └── data-store.ts          # Eski JSON veri yöneticisi
 ├── public/
-│   ├── default.jpg            # Varsayılan fotoğraf
-│   └── uploads/               # Yüklenen dosyalar
+│   └── default.jpg            # Varsayılan fotoğraf
 └── package.json
 ```
 
@@ -126,7 +127,7 @@ class StorageService {
   id: string,                    // Auto-generated document ID
   title: string,                 // Proje başlığı
   description: string,           // Proje açıklaması
-  image: string,                 // Firebase Storage URL
+  photoUrl: string,              // Firebase Storage URL
   category: string,              // Kategori
   code: string,                  // Kod örneği
   createdAt: Timestamp,          // Firebase server timestamp
@@ -156,16 +157,17 @@ const firebaseConfig = {
 
 ## � API Endpoints
 
-### İçerik İşlemleri
+### 🔥 Firebase İşlemleri
 ```bash
-GET    /api/contents           # Tüm içerikleri getir
-POST   /api/contents           # Yeni içerik ekle
-DELETE /api/contents/[id]      # İçerik sil
+# Firebase Service Layer ile veri işlemleri
+ContentService.getAllContents()     # Firestore'dan tüm içerikleri getir
+ContentService.addContent()         # Firestore'a yeni içerik ekle
+ContentService.deleteContent(id)    # Firestore'dan içerik sil
 ```
 
-### Admin İşlemleri
+### API Endpoints
 ```bash
-POST   /api/add-content        # Admin panelinden içerik ekle
+POST   /api/test-data          # Firebase test verisi ekleme
 GET    /api/categories         # Kategorileri getir
 ```
 
@@ -311,11 +313,12 @@ interface StorageFile {
 ## 🎨 Kullanıcı Arayüzü
 
 ### Ana Sayfa Features
-- **Kategori Filtreleme:** Tümü, Arduino, Diğer
+- **🔥 Firebase Kategori Filtreleme:** Tümü, Firebase, Next.js, React
 - **Slider Navigation:** ◀ ▶ butonları ile sayfalama
-- **Hover Effects:** Delete butonları ve görsel efektler
+- **🔥 Firebase Badge'leri:** Her projede Firebase işaretleri
 - **Modal Interactions:** Tıkla-aç modal sistemi
 - **Code Syntax:** Syntax highlighted kod blokları
+- **Real-time Updates:** Firebase'den anlık veri güncellemeleri
 
 ### Responsive Design
 - **Desktop:** 3 sütunlu grid layout
@@ -325,11 +328,13 @@ interface StorageFile {
 ## 🛠️ Kullanılan Teknolojiler
 
 - **Frontend:** Next.js 14, React, TypeScript
+- **Backend:** 🔥 Firebase Firestore, Firebase Storage
 - **Styling:** Tailwind CSS
-- **Icons:** Emoji icons (📋, ✅, 📄, ×)
-- **API:** Next.js API Routes
-- **Data:** JSON file-based storage
-- **File Handling:** Multipart form data
+- **Icons:** Emoji icons (📋, ✅, 📄, ×, 🔥)
+- **API:** Next.js API Routes + Firebase SDK
+- **Database:** 🔥 Firebase Firestore (NoSQL Cloud Database)
+- **File Storage:** 🔥 Firebase Storage
+- **Real-time:** 🔥 Firebase real-time synchronization
 
 ## 🔍 Kullanım Örnekleri
 
@@ -340,11 +345,11 @@ interface StorageFile {
 4. "📋 Kod Örneği Gör" ile kodu incele
 
 ### İçerik Ekleme
-1. `/admin/dashboard` adresine git
+1. `/admin/firebase` adresine git (🔥 Firebase Admin Panel)
 2. Şifre gir: `oguzhan2025`
 3. Form doldur (başlık, açıklama, kategori, kod)
-4. Fotoğraf yükle (opsiyonel)
-5. "İçerik Ekle" butonuna tıkla
+4. Fotoğraf yükle (Firebase Storage'a) - opsiyonel
+5. "İçerik Ekle" butonuna tıkla (Firestore'a kaydedilir)
 
 ### İçerik Silme
 1. Ana sayfada proje kartının üzerine hover yap
@@ -356,25 +361,28 @@ interface StorageFile {
 ### Genel Sorunlar
 1. **Port 3000 meşgul** → `lsof -ti:3000 | xargs kill -9`
 2. **Node modules sorunu** → `rm -rf node_modules && npm install`
-3. **Varsayılan fotoğraf yüklenmiyor** → `public/default.jpg` dosyasını kontrol et
+3. **🔥 Firebase bağlantı sorunu** → Firebase config kontrolü
+4. **Firestore erişim sorunu** → Test modunda güvenlik kuralları
 
-### Development
+### 🔥 Firebase Development
 ```bash
 # Clean install
 rm -rf node_modules package-lock.json
 npm install
 
-# Reset data
-echo "[]" > data/contents.json
+# Firebase test verisi ekleme
+curl -X POST http://localhost:3000/api/test-data
 
-# Check file permissions
-ls -la public/default.jpg
+# Firebase connection test
+# Console'da "İçerikler yüklendi! 🔥" mesajını kontrol et
 ```
 
 ## 📈 İstatistikler
 
-- **Toplam Component:** 1 ana galeri komponenti
-- **API Endpoint:** 4 RESTful endpoint
+- **🔥 Firebase Component:** 1 ana Firebase galeri komponenti
+- **🔥 Firebase Service:** 4 servis sınıfı (Content, Category, Storage, Stats)
+- **🔥 Live Data:** 3 Firebase projesi (React, Next.js, Firebase)
+- **API Endpoint:** Firebase SDK + 1 test endpoint
 - **Responsive Breakpoint:** 3 farklı ekran boyutu
 - **Modal Type:** 3 farklı modal türü
 
